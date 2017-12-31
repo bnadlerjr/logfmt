@@ -1,12 +1,12 @@
 (ns logfmt.core)
 
 (defn- safe-println [& more]
-  "The Clojure `println` function has a race condition. See http://yellerapp.com/posts/2014-12-11-14-race-condition-in-clojure-println.html for more information."
+  "The Clojure `println` function has a race condition. See [this blog post](http://yellerapp.com/posts/2014-12-11-14-race-condition-in-clojure-println.html) for more information."
   (.write *out* (str (clojure.string/join " " more) "\n")))
 
 (defn- format-key-value-pairs
   [[k v]]
-  (let [format-str (if (re-find #"(\/|\s)" (str v))
+  (let [format-str (if (and (string? v) (re-find #"(\/|\s)" v))
                      "%s=\"%s\""
                      "%s=%s")]
     (format format-str (name k) v)))
