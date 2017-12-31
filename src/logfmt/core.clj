@@ -22,19 +22,21 @@
     *out*
     *err*))
 
+(defn- full-message
+  [dev-mode level message attrs]
+  (let [level-str (name level)
+        attr-str (clojure.string/join " " (map format-key-value-pairs attrs))]
+    (if dev-mode
+      (str level-str " | " message " " attr-str)
+      (str (format "at=%s msg=\"%s\" " level-str message) attr-str))))
+
 (defn- log
   ([level config message]
    (log level config message {}))
   ([level config message attrs]
-   (let [attr-str (clojure.string/join " " (map format-key-value-pairs attrs))
-         context (determine-output-context level)]
-     (if (:dev-mode config)
-       (if (= "" attr-str)
-         (safe-println context (name level) "|" message)
-         (safe-println context (name level) "|" message attr-str))
-       (if (= "" attr-str)
-         (safe-println context (format "%s=%s" "at" (name level)) (format "%s=\"%s\"" "msg" message))
-         (safe-println context (format "%s=%s" "at" (name level)) (format "%s=\"%s\"" "msg" message) attr-str))))))
+   (let [context (determine-output-context level)
+         full-message (full-message (:dev-mode config) level message attrs)]
+     (safe-println context (clojure.string/trim full-message)))))
 
 (def info (partial log :info))
 (def error (partial log :error))
