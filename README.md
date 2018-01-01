@@ -8,13 +8,76 @@ latest updates.
 TODO: Clojars installation link.
 
 ## Quickstart
-### Example
-TODO
+### Install
+Add the dependency to your `project.clj` file:
 
-### Development Mode
-TODO
+```
+[bnadlerjr/logfmt "0.1.0"]
+```
+
+### Examples
+#### Basic Logging
+
+```clojure
+(require '[logfmt.core :as log])
+
+(log/info "Some message text." {:foo 1 :bar 2 :baz 3})
+```
+
+The above will print a message formatted like this to `STDOUT`:
+
+```
+at=info msg="Some message text." foo=1 bar=2 baz=3
+```
+
+#### Ring Middleware
+This project also provides Ring middleware for request logging. For example:
+
+```clojure
+(ns hello-world.handler
+  (:require [compojure.core :refer :all]
+            [compojure.route :as route]
+            [logfmt.ring.middleware :refer [wrap-logger]))
+
+(defroutes app-routes
+  (GET "/hello" [] "Hello World)
+  (route/not-found "Page not found"))
+
+(def app
+  (-> app-routes
+      wrap-logger))
+```
+
+Any GET requests to `/hello` will result in two messages being logged to `STDOUT`
+like this:
+
+```
+at=info msg="Started GET '/hello'" method=GET path="/hello" params={} request-id=abc123
+at=info msg="Completed 200 in 10ms" method=GET path="/hello" status=200 duration=10ms request-id=abc123
+```
+
+### Development Mode Logging
+By default the var `dev-mode` is set to `false`. Setting it to `true` like so:
+
+```clojure
+(require '[logfmt.core :as log])
+
+(log/set-dev-mode! true)
+(log/info "Some message text." {:foo 1 :bar 2 :baz 3})
+```
+
+will result in messages being output in a more readable format suitable for
+local development.
+
+```
+info | Some message text. foo=1 bar=2 baz=3
+```
 
 ## Development
+Pre-requisites:
+
+1. [Leiningen](https://leiningen.org/)
+
 To install a local snapshot:
 
 ```
@@ -23,9 +86,12 @@ $ lein install
 
 To push a new release to Clojars:
 
-1. Update the version in `project.clj`.
-1. Update CHANGELOG.
-1. Create tag
+1. Update the version in `project.clj`
+1. Update CHANGELOG
+1. `lein doc`
+1. `git add . && git commit`
+1. `git tag -a vx.x.x -m "Tag version x.x.x"`
+1. `git push --tags`
 1. `lein deploy clojars`
 
 ### Contributing
