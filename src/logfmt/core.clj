@@ -23,15 +23,17 @@
   (let [level-str (name level)
         attr-str (clojure.string/join " " (map format-key-value-pairs attrs))]
     (if dev-mode
-      (str level-str " | " message " " attr-str)
-      (str (format "at=%s msg=\"%s\" " level-str message) attr-str))))
+      (clojure.string/trimr
+        (str "\n" level-str " | " message " " attr-str))
+      (clojure.string/trim
+        (str (format "at=%s msg=\"%s\" " level-str message) attr-str)))))
 
 (defn- log
   ([level message]
    (log level message {}))
   ([level message attrs]
    (let [full-message (full-message level message attrs)]
-     (.println System/out (clojure.string/trim full-message)))))
+     (.println System/out full-message))))
 
 (def info (partial log :info))
 (def error (partial log :error))

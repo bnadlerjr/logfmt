@@ -18,21 +18,21 @@
 (deftest info-test
   (testing "info message in dev mode"
     (set-dev-mode! true)
-    (is (= "info | Some message.\n"
+    (is (= "\ninfo | Some message.\n"
            (with-system-out-str (info "Some message."))))
 
-    (is (= "info | A message. duration=10ms\n"
+    (is (= "\ninfo | A message. duration=10ms\n"
            (with-system-out-str (info "A message." {:duration "10ms"}))))
 
-    (is (= "info | My message. duration=12ms method=GET\n"
+    (is (= "\ninfo | My message. duration=12ms method=GET\n"
            (with-system-out-str (info "My message." {:duration "12ms"
                                                      :method "GET"}))))
 
-    (is (= "info | Message w/ string attribute. method=POST path=\"/foo\"\n"
+    (is (= "\ninfo | Message w/ string attribute. method=POST path=\"/foo\"\n"
            (with-system-out-str (info "Message w/ string attribute." {:method "POST"
                                                                       :path "/foo"}))))
 
-    (is (= "info | Message w/ nested map attributes. method=GET params={:name \"jdoe\"}\n"
+    (is (= "\ninfo | Message w/ nested map attributes. method=GET params={:name \"jdoe\"}\n"
            (with-system-out-str (info "Message w/ nested map attributes." {:method "GET"
                                                                            :params {:name "jdoe"}})))))
 
@@ -59,21 +59,21 @@
 (deftest error-test
   (testing "error message in dev mode"
     (set-dev-mode! true)
-    (is (= "error | Some message.\n"
+    (is (= "\nerror | Some message.\n"
            (with-system-out-str (error "Some message."))))
 
-    (is (= "error | A message. duration=10ms\n"
+    (is (= "\nerror | A message. duration=10ms\n"
            (with-system-out-str (error "A message." {:duration "10ms"}))))
 
-    (is (= "error | My message. duration=12ms method=GET\n"
+    (is (= "\nerror | My message. duration=12ms method=GET\n"
            (with-system-out-str (error "My message." {:duration "12ms"
                                                       :method "GET"}))))
 
-    (is (= "error | Message w/ string attribute. method=POST path=\"/foo\"\n"
+    (is (= "\nerror | Message w/ string attribute. method=POST path=\"/foo\"\n"
            (with-system-out-str (error "Message w/ string attribute." {:method "POST"
                                                                        :path "/foo"}))))
 
-    (is (= "error | Message w/ nested map attributes. method=GET params={:name \"jdoe\"}\n"
+    (is (= "\nerror | Message w/ nested map attributes. method=GET params={:name \"jdoe\"}\n"
            (with-system-out-str (error "Message w/ nested map attributes." {:method "GET"
                                                                             :params {:name "jdoe"}})))))
   (testing "error message not in dev mode"
