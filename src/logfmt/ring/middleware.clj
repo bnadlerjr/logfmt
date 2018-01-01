@@ -1,8 +1,20 @@
 (ns logfmt.ring.middleware
+  "Ring middleware helpers."
   (:require [logfmt.core :refer [info]])
   (:import (java.util UUID)))
 
 (defn wrap-logger
+  "Wraps a Ring request outputting two logging messages: one for the request
+  and another for the response. Includes useful attributes such as `path`,
+  `method`, `status`, etc.
+
+  Also adds a `request-id` attribute via the `x-request-id` header to both
+  messages, so that messages can be matched. If the `x-request-id` header is
+  not available, one will be generated.
+
+  Heroku will add a `x-request-id` header to all requests automatically, so
+  the generation feature is mainly used when the Ring application is deployed
+  elsewhere (i.e. locally)."
   [handler]
   (fn [req]
     (let [start (System/currentTimeMillis)
