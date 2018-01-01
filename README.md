@@ -6,6 +6,7 @@ A Clojure library for emitting [logfmt](https://brandur.org/logfmt). Read the
 latest updates.
 
 [![Clojars Project](https://img.shields.io/clojars/v/bnadlerjr/logfmt.svg)](https://clojars.org/bnadlerjr/logfmt)
+[![Build Status](https://travis-ci.org/bnadlerjr/logfmt.svg?branch=master)](https://travis-ci.org/bnadlerjr/logfmt)
 
 ## Quickstart
 ### Install
@@ -91,7 +92,8 @@ To push a new release to Clojars:
 1. `lein doc`
 1. `git add . && git commit`
 1. `git tag -a vx.x.x -m "Tag version x.x.x"`
-1. `git push --tags`
+1. `git push --tags && git push`
+1. Wait for successful TravisCI build
 1. `lein deploy clojars`
 
 ### Contributing
