@@ -1,4 +1,5 @@
-(ns logfmt.core)
+(ns logfmt.core
+  (:require [io.aviso.ansi :as ansi]))
 
 (def dev-mode false)
 
@@ -21,10 +22,14 @@
 (defn- full-message
   [level message attrs]
   (let [level-str (name level)
+        color (cond
+                (= :info level) ansi/cyan
+                (= :error level) ansi/red
+                :else identity)
         attr-str (clojure.string/join " " (map format-key-value-pairs attrs))]
     (if dev-mode
       (clojure.string/trimr
-        (format "\n%s | %s %s" level-str message attr-str))
+        (format "\n%s | %s %s" (color level-str) (color message) attr-str))
       (clojure.string/trim
         (format "at=%s msg=\"%s\" %s" level-str message attr-str)))))
 

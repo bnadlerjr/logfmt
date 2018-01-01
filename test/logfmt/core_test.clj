@@ -1,5 +1,6 @@
 (ns logfmt.core-test
   (:require [clojure.test :refer :all]
+            [io.aviso.ansi :as ansi]
             [logfmt.core :refer :all]))
 
 (import [java.io ByteArrayOutputStream PrintStream])
@@ -18,23 +19,25 @@
 (deftest info-test
   (testing "info message in dev mode"
     (set-dev-mode! true)
-    (is (= "\ninfo | Some message.\n"
-           (with-system-out-str (info "Some message."))))
+    (let [col ansi/cyan
+          prefix (str "\n" (col "info") " | ")]
+      (is (= (str prefix (col "Some message.") "\n")
+             (with-system-out-str (info "Some message."))))
 
-    (is (= "\ninfo | A message. duration=10ms\n"
-           (with-system-out-str (info "A message." {:duration "10ms"}))))
+      (is (= (str prefix (col "A message.") " duration=10ms\n")
+             (with-system-out-str (info "A message." {:duration "10ms"}))))
 
-    (is (= "\ninfo | My message. duration=12ms method=GET\n"
-           (with-system-out-str (info "My message." {:duration "12ms"
-                                                     :method "GET"}))))
+      (is (= (str prefix (col "My message.") " duration=12ms method=GET\n")
+             (with-system-out-str (info "My message." {:duration "12ms"
+                                                       :method "GET"}))))
 
-    (is (= "\ninfo | Message w/ string attribute. method=POST path=\"/foo\"\n"
-           (with-system-out-str (info "Message w/ string attribute." {:method "POST"
-                                                                      :path "/foo"}))))
+      (is (= (str prefix (col "Message w/ string attribute.") " method=POST path=\"/foo\"\n")
+             (with-system-out-str (info "Message w/ string attribute." {:method "POST"
+                                                                        :path "/foo"}))))
 
-    (is (= "\ninfo | Message w/ nested map attributes. method=GET params={:name \"jdoe\"}\n"
-           (with-system-out-str (info "Message w/ nested map attributes." {:method "GET"
-                                                                           :params {:name "jdoe"}})))))
+      (is (= (str prefix (col "Message w/ nested map attributes.") " method=GET params={:name \"jdoe\"}\n")
+             (with-system-out-str (info "Message w/ nested map attributes." {:method "GET"
+                                                                             :params {:name "jdoe"}}))))))
 
   (testing "info message not in dev mode"
     (set-dev-mode! false)
@@ -59,23 +62,26 @@
 (deftest error-test
   (testing "error message in dev mode"
     (set-dev-mode! true)
-    (is (= "\nerror | Some message.\n"
-           (with-system-out-str (error "Some message."))))
+    (let [col ansi/red
+          prefix (str "\n" (col "error") " | ")]
+      (is (= (str prefix (col "Some message.") "\n")
+             (with-system-out-str (error "Some message."))))
 
-    (is (= "\nerror | A message. duration=10ms\n"
-           (with-system-out-str (error "A message." {:duration "10ms"}))))
+      (is (= (str prefix (col "A message.") " duration=10ms\n")
+             (with-system-out-str (error "A message." {:duration "10ms"}))))
 
-    (is (= "\nerror | My message. duration=12ms method=GET\n"
-           (with-system-out-str (error "My message." {:duration "12ms"
-                                                      :method "GET"}))))
+      (is (= (str prefix (col "My message.") " duration=12ms method=GET\n")
+             (with-system-out-str (error "My message." {:duration "12ms"
+                                                        :method "GET"}))))
 
-    (is (= "\nerror | Message w/ string attribute. method=POST path=\"/foo\"\n"
-           (with-system-out-str (error "Message w/ string attribute." {:method "POST"
-                                                                       :path "/foo"}))))
+      (is (= (str prefix (col "Message w/ string attribute.") " method=POST path=\"/foo\"\n")
+             (with-system-out-str (error "Message w/ string attribute." {:method "POST"
+                                                                         :path "/foo"}))))
 
-    (is (= "\nerror | Message w/ nested map attributes. method=GET params={:name \"jdoe\"}\n"
-           (with-system-out-str (error "Message w/ nested map attributes." {:method "GET"
-                                                                            :params {:name "jdoe"}})))))
+      (is (= (str prefix (col "Message w/ nested map attributes.") " method=GET params={:name \"jdoe\"}\n")
+             (with-system-out-str (error "Message w/ nested map attributes." {:method "GET"
+                                                                              :params {:name "jdoe"}}))))))
+
   (testing "error message not in dev mode"
     (set-dev-mode! false)
     (is (= "at=error msg=\"Some message.\"\n"
