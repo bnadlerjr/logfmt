@@ -5,7 +5,7 @@ A Clojure library for emitting [logfmt](https://brandur.org/logfmt). Read the
 [changelog](https://github.com/bnadlerjr/logfmt/blob/master/CHANGELOG.md) for
 latest updates.
 
-TODO: Clojars installation link.
+[![Clojars Project](https://img.shields.io/clojars/v/bnadlerjr/logfmt.svg)](https://clojars.org/bnadlerjr/logfmt)
 
 ## Quickstart
 ### Install
