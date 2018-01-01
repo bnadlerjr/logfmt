@@ -4,23 +4,25 @@
 
 (defn wrap-logger
   [handler]
-  (fn [request]
+  (fn [req]
     (let [start (System/currentTimeMillis)
-          request-id (get-in request [:headers "x-request-id"] (UUID/randomUUID))
-          method (clojure.string/upper-case (name (:request-method request)))
-          path (str (:uri request)
-                    (if-let [query-string (:query-string request)]
+          request-id (get-in req [:headers "x-request-id"] (UUID/randomUUID))
+          method (clojure.string/upper-case (name (:request-method req)))
+          path (str (:uri req)
+                    (if-let [query-string (:query-string req)]
                       (str "?" query-string)))]
-      (info "Starting Ring request"
+      (info (format "Started %s '%s'" method path)
             {:method method
              :path path
-             :params (:params request)
+             :params (:params req)
              :request-id request-id})
-      (let [response (handler request)]
-        (info "Finished Ring request"
+      (let [response (handler req)
+            status (:status response)
+            duration (str (- (System/currentTimeMillis) start) "ms")]
+        (info (format "Completed %s in %s" status duration)
               {:method method
                :path path
-               :status (:status response)
-               :duration (str (- (System/currentTimeMillis) start) "ms")
+               :status status
+               :duration duration
                :request-id request-id})
         response))))
