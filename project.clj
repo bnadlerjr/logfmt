@@ -1,4 +1,4 @@
-(defproject logfmt "0.1.0-SNAPSHOT"
+(defproject bnadlerjr/logfmt "0.1.0-SNAPSHOT"
   :description "A clojure library for emitting logfmt."
   :url "https://github.com/bnadlerjr/logfmt"
   :license {:name "Eclipse Public License"
