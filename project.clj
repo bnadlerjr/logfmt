@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :aliases {"lint" ["do" ["ancient"] ["kibit"] ["eastwood"]]
-            "doc" ["do" ["marg"]]}
+            "doc" ["do" ["marg" "-f" "index.html"]]}
 
   :dependencies [[io.aviso/pretty "0.1.34"]
                  [org.clojure/clojure "1.9.0"]]
