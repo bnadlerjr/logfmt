@@ -24,9 +24,9 @@
         attr-str (clojure.string/join " " (map format-key-value-pairs attrs))]
     (if dev-mode
       (clojure.string/trimr
-        (str "\n" level-str " | " message " " attr-str))
+        (format "\n%s | %s %s" level-str message attr-str))
       (clojure.string/trim
-        (str (format "at=%s msg=\"%s\" " level-str message) attr-str)))))
+        (format "at=%s msg=\"%s\" %s" level-str message attr-str)))))
 
 (defn- log
   ([level message]
