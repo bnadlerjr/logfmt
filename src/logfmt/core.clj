@@ -19,13 +19,17 @@
                      "%s=%s")]
     (format format-str (name k) v)))
 
+(defn- determine-color-fn
+  [level]
+  (cond
+    (= :info level) ansi/cyan
+    (= :error level) ansi/red
+    :else identity))
+
 (defn- full-message
   [level message attrs]
   (let [level-str (name level)
-        color (cond
-                (= :info level) ansi/cyan
-                (= :error level) ansi/red
-                :else identity)
+        color (determine-color-fn level)
         attr-str (clojure.string/join " " (map format-key-value-pairs attrs))]
     (if dev-mode
       (clojure.string/trimr
@@ -37,8 +41,7 @@
   ([level message]
    (log level message {}))
   ([level message attrs]
-   (let [full-message (full-message level message attrs)]
-     (.println System/out full-message))))
+   (.println System/out (full-message level message attrs))))
 
 (def info (partial log :info))
 (def error (partial log :error))
