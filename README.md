@@ -86,8 +86,8 @@ $ lein install
 
 To push a new release to Clojars:
 
+1. Document added, removed , fixed, etc. in CHANGELOG
 1. Update the version in `project.clj`
-1. Update CHANGELOG
 1. `lein doc`
 1. `git add . && git commit`
 1. `git tag -a vx.x.x -m "Tag version x.x.x"`
@@ -98,10 +98,10 @@ To push a new release to Clojars:
 Bug reports and pull requests are welcome on [GitHub](https://github.com/bnadlerjr/logfmt).
 
 1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1. Create your feature branch (`git checkout -b my-new-feature`)
+1. Commit your changes (`git commit -am 'Add some feature'`)
+1. Push to the branch (`git push origin my-new-feature`)
+1. Create new Pull Request
 
 ## License
 
